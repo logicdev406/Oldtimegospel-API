@@ -3,14 +3,18 @@ const app = express(); //Instantiate an express app, the main work horse of this
 const port = process.env.PORT || 5000; //Save the port number where your server will be listening
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const mysqlConnection = require('./db/connection');
 
 //Middlewares
 app.use(bodyParser.json());
 app.options('*', cors());
 
+//Database connection
+mysqlConnection;
+
 app.get('/', (req, res) => {
   //get requests to the root ("/") will route here
-  res.sendFile('SERVER IS UP AND RUNNING'); //Server response by sending a text message " SERVER IS UP AND RUNNING "
+  res.send('SERVER IS UP AND RUNNING'); //Server response by sending a text message " SERVER IS UP AND RUNNING "
 });
 
 app.listen(port, () => {

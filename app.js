@@ -4,14 +4,14 @@ const cors = require('cors');
 const app = express(); //Instantiate an express app, the main work horse of this server
 
 //routers import
-const Posts = require('./routers/posts');
+const Post = require('./routers/post');
 
 //Middlewares
 app.use(bodyParser.json());
 app.use(cors());
 
 //routes
-app.use('/posts', Posts);
+app.use('/post', Post);
 
 app.get('/', (req, res) => {
   //get requests to the root ("/") will route here

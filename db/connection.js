@@ -3,7 +3,7 @@ const mysql = require('mysql2');
 //config import
 const { dbConnection } = require('../config/config');
 
-const mysqlConnection = mysql.createConnection({
+const pool = mysql.createPool({
   host: dbConnection.host,
   user: dbConnection.user,
   password: dbConnection.password,
@@ -12,16 +12,4 @@ const mysqlConnection = mysql.createConnection({
   insecureAuth: true
 });
 
-mysqlConnection.connect((err) => {
-  if (!err) {
-    {
-      console.log('Database connected');
-    }
-  } else {
-    {
-      console.log('error' + err.message);
-    }
-  }
-});
-
-module.exports = mysqlConnection;
+module.exports = pool.promise();

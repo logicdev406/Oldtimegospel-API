@@ -9,6 +9,7 @@ const Post = require('./routers/post');
 //Middlewares
 app.use(bodyParser.json());
 app.use(cors());
+app.use('/public/uploads', express.static(__dirname + '/public/uploads'));
 
 //routes
 app.use('/post', Post);

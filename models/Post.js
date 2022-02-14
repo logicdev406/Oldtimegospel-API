@@ -1,19 +1,25 @@
 const db = require('../db/connection');
+const { v4: uuidv4 } = require('uuid');
 
 class Post {
-  constructor(title, description) {
+  constructor(title, description, image) {
     this.title = title;
     this.description = description;
+    this.image = image;
   }
 
   async save() {
-    let date = Date.now();
+    let d = new Date();
+    let yyyy = d.getFullYear();
+    let mm = d.getMonth() + 1;
+    let dd = d.getDate();
 
-    console.log(date);
+    let createdAt = `${yyyy}-${mm}-${dd}`;
+    let id = uuidv4();
 
     let sql = `
-      INSERT INTO posts( title, description, createdAt ) 
-      VALUES('${this.title}','${this.description}','${date}'
+      INSERT INTO posts( id, title, image, description, createdAt )
+      VALUES('${id}','${this.title}','${this.image}','${this.description}','${createdAt}'
       )
       `;
 
@@ -22,16 +28,22 @@ class Post {
     return newPost;
   }
 
-  static async listPosts() {
+  static listPosts() {
     let sql = ` SELECT * FROM posts `;
 
-    return await db.execute(sql);
+    return db.execute(sql);
   }
 
-  static async findById(id) {
+  static findById(id) {
     let sql = ` SELECT * FROM posts WHERE id = ${id} `;
 
-    return await db.execute(sql);
+    return db.execute(sql);
+  }
+
+  static deleteById(id) {
+    let sql = ` DELETE * FROM posts WHERE id = ${id} `;
+
+    return db.execute(sql);
   }
 }
 

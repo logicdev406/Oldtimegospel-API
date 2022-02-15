@@ -6,6 +6,12 @@ class PostController {
     try {
       const posts = await Post.findAll();
 
+      if (!posts) {
+        return res
+          .status(404)
+          .send(response('Faild to fetch all posts', {}, false));
+      }
+
       res.send(response('Featched posts successfully', posts));
     } catch (e) {
       console.log(e.message);
@@ -32,7 +38,26 @@ class PostController {
   }
 
   static async createPost(req, res) {
-    let { title, description } = req.body;
+    const {
+      title,
+      lyrics,
+      audio,
+      description,
+      instagramHandle,
+      facebookHandle
+    } = req.body;
+
+    if (!title || !lyrics || !audio || !description) {
+      return res
+        .status(428)
+        .send(
+          response(
+            'The following fields are required but one is missing :- Title, Description, lyrics, Audio'
+          ),
+          {},
+          false
+        );
+    }
 
     const file = req.file;
     if (!file) {
@@ -46,11 +71,19 @@ class PostController {
 
     const image = `${basePath}${fileName}`;
 
-    let post = new Post(title, description, image);
+    let post = new Post({
+      title: title,
+      description: description,
+      image: image,
+      audio: audio,
+      lyrics: lyrics,
+      facebookHandle: facebookHandle,
+      instagramHandle: instagramHandle
+    });
 
     post = await post.save();
 
-    res.send('Created new post');
+    res.send(response('Post was successfully created', post));
   }
 
   static async deletePostById(req, res) {

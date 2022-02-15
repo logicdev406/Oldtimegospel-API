@@ -24,6 +24,11 @@ app.get('/', (req, res) => {
 
 const port = process.env.PORT || 5000; //Save the port number where your server will be listening
 
+// Sync all models that are not
+// already in the database
+db.sync({ force: true });
+
+// Database connect
 db.authenticate()
   .then(() => console.log('Database connected...'))
   .catch((err) => console.log('Error:' + err));

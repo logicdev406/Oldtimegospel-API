@@ -1,16 +1,13 @@
 const db = require('../db/connection');
 const Sequelize = require('sequelize');
 const { v4: uuidv4 } = require('uuid');
-const sequelize = require('../db/connection');
 
-const Post = sequelize.define('Posts', {
+const Post = db.define('posts', {
   id: {
-    type: Sequelize.UUIDV4,
-    allowNull: false,
-    validator: {
-      notEmpty: true
+    type: Sequelize.DataTypes.UUID,
+    defaultValue: function () {
+      return uuidv4();
     },
-    defaultValue: uuidv4(),
     primaryKey: true
   },
   title: {
@@ -53,11 +50,6 @@ const Post = sequelize.define('Posts', {
     },
     defaultValue: ''
   },
-  hashtags: {
-    type: Sequelize.ARRAY(Sequelize.STRING),
-    allowNull: false,
-    defaultValue: []
-  },
   instagramHandle: {
     type: Sequelize.STRING,
     allowNull: false,
@@ -67,17 +59,17 @@ const Post = sequelize.define('Posts', {
     type: Sequelize.STRING,
     allowNull: false,
     defaultValue: ''
-  },
-  comments: {
-    type: Sequelize.ARRAY(Sequelize.STRING),
-    allowNull: false,
-    defaultValue: ''
-  },
-  createdAt: {
-    type: Sequelize.DATE,
-    allowNull: false,
-    defaultValue: Sequelize.NOW
   }
+  // hashtags: {
+  //   type: Sequelize.ARRAY(Sequelize.STRING),
+  //   allowNull: false,
+  //   defaultValue: []
+  // }
+  // comments: {
+  //   type: Sequelize.ARRAY(Sequelize.STRING),
+  //   allowNull: false,
+  //   defaultValue: ''
+  // },
 });
 
 module.exports = Post;

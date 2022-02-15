@@ -3,6 +3,9 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const app = express(); //Instantiate an express app, the main work horse of this server
 
+// Database
+const db = require('./db/connection');
+
 //routers import
 const Post = require('./routers/post');
 
@@ -20,6 +23,10 @@ app.get('/', (req, res) => {
 });
 
 const port = process.env.PORT || 5000; //Save the port number where your server will be listening
+
+db.authenticate()
+  .then(() => console.log('Database connected...'))
+  .catch((err) => console.log('Error:' + err));
 
 app.listen(port, () => {
   //server starts listening for any attempts from a client to connect at port: {port}

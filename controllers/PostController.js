@@ -4,11 +4,12 @@ const Post = require('../models/Post');
 class PostController {
   static async listPosts(req, res) {
     try {
-      const [posts, _] = await Post.listPosts();
+      const posts = await Post.findAll();
 
       res.send(response('Featched posts successfully', posts));
     } catch (e) {
       console.log(e.message);
+      res.status(500);
     }
   }
 

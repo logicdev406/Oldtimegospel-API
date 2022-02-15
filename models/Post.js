@@ -1,51 +1,83 @@
 const db = require('../db/connection');
+const Sequelize = require('sequelize');
 const { v4: uuidv4 } = require('uuid');
-const { randomUUID } = require('crypto');
+const sequelize = require('../db/connection');
 
-class Post {
-  constructor(title, description, image) {
-    this.title = title;
-    this.description = description;
-    this.image = image;
+const Post = sequelize.define('Posts', {
+  id: {
+    type: Sequelize.UUIDV4,
+    allowNull: false,
+    validator: {
+      notEmpty: true
+    },
+    defaultValue: uuidv4(),
+    primaryKey: true
+  },
+  title: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    validator: {
+      notEmpty: true
+    },
+    defaultValue: ''
+  },
+  image: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    validator: {
+      notEmpty: true
+    },
+    defaultValue: ''
+  },
+  description: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    validator: {
+      notEmpty: true
+    },
+    defaultValue: ''
+  },
+  lyrics: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    validator: {
+      notEmpty: true
+    },
+    defaultValue: ''
+  },
+  audio: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    validator: {
+      notEmpty: true
+    },
+    defaultValue: ''
+  },
+  hashtags: {
+    type: Sequelize.ARRAY(Sequelize.STRING),
+    allowNull: false,
+    defaultValue: []
+  },
+  instagramHandle: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    defaultValue: ''
+  },
+  facebookHandle: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    defaultValue: ''
+  },
+  comments: {
+    type: Sequelize.ARRAY(Sequelize.STRING),
+    allowNull: false,
+    defaultValue: ''
+  },
+  createdAt: {
+    type: Sequelize.DATE,
+    allowNull: false,
+    defaultValue: Sequelize.NOW
   }
-
-  async save() {
-    let d = new Date();
-    let yyyy = d.getFullYear();
-    let mm = d.getMonth() + 1;
-    let dd = d.getDate();
-
-    let createdAt = `${yyyy}-${mm}-${dd}`;
-    let id = randomUUID();
-
-    let sql = `
-      INSERT INTO posts( id, title, image, description, createdAt )
-      VALUES('${id}','${this.title}','${this.image}','${this.description}','${createdAt}'
-      )
-      `;
-
-    const [newPost, _] = await db.execute(sql);
-
-    return newPost;
-  }
-
-  static listPosts() {
-    let sql = ` SELECT * FROM posts `;
-
-    return db.execute(sql);
-  }
-
-  static findById(id) {
-    let sql = ` SELECT * FROM posts WHERE id = ${id} `;
-
-    return db.execute(sql);
-  }
-
-  static deleteById(id) {
-    let sql = ` DELETE * FROM posts WHERE id = ${id} `;
-
-    return db.execute(sql);
-  }
-}
+});
 
 module.exports = Post;

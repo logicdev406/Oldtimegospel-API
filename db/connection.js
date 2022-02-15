@@ -1,15 +1,18 @@
-const mysql = require('mysql2');
-
-//config import
+const Sequelize = require('sequelize');
 const { dbConnection } = require('../config/config');
 
-const pool = mysql.createPool({
-  host: dbConnection.host,
-  user: dbConnection.user,
-  password: dbConnection.password,
-  database: dbConnection.database,
-  multipleStatements: true,
-  insecureAuth: true
-});
+module.exports = new Sequelize(
+  dbConnection.database,
+  dbConnection.user,
+  dbConnection.password,
+  {
+    host: 'localhost',
+    dialect: 'mysql',
 
-module.exports = pool.promise();
+    pool: {
+      max: 5,
+      min: 0,
+      idle: 10000
+    }
+  }
+);

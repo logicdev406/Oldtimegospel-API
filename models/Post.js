@@ -1,5 +1,6 @@
 const db = require('../db/connection');
 const { v4: uuidv4 } = require('uuid');
+const { randomUUID } = require('crypto');
 
 class Post {
   constructor(title, description, image) {
@@ -15,7 +16,7 @@ class Post {
     let dd = d.getDate();
 
     let createdAt = `${yyyy}-${mm}-${dd}`;
-    let id = uuidv4();
+    let id = randomUUID();
 
     let sql = `
       INSERT INTO posts( id, title, image, description, createdAt )

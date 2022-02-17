@@ -6,12 +6,15 @@ const upload = multer({ Storage });
 const {
   listPosts,
   createPost,
-  findPostById,
-  deletePostById
+  deletePostById,
+  findPostBySlug
 } = require('../controllers/PostController');
 
+// List Posts endpoint
 router.get('/', listPosts);
-router.get('/:id', findPostById);
+// Fetch post by slug
+router.get('/:slug', findPostBySlug);
+// Create post
 router.post(
   '/',
   // upload.single('audio'),
@@ -21,6 +24,7 @@ router.post(
   ]),
   createPost
 );
+// Delete post by id
 router.delete('/:id', deletePostById);
 
 module.exports = router;

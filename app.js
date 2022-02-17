@@ -31,7 +31,8 @@ const port = process.env.PORT || 5000; //Save the port number where your server 
 
 // Sync all models that are not
 // already in the database
-db.sync({ force: true });
+// db.sync({ force: true });
+db.sync();
 
 // Database connect
 db.authenticate()

@@ -2,6 +2,7 @@ const db = require('../db/connection');
 const Sequelize = require('sequelize');
 const { v4: uuidv4 } = require('uuid');
 const SequelizeSlugify = require('sequelize-slugify');
+const Comment = require('./Comment');
 
 const Post = db.define('posts', {
   id: {
@@ -66,16 +67,14 @@ const Post = db.define('posts', {
   //   allowNull: false,
   //   defaultValue: []
   // }
-  // comments: {
-  //   type: Sequelize.ARRAY(Sequelize.STRING),
-  //   allowNull: false,
-  //   defaultValue: ''
-  // },
   slug: {
     type: Sequelize.STRING,
     unique: true
   }
 });
+
+Post.hasMany(Comment);
+
 SequelizeSlugify.slugifyModel(Post, { source: ['title'] });
 
 module.exports = Post;

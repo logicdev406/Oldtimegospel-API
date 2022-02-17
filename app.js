@@ -17,6 +17,11 @@ app.use('/public/uploads', express.static(__dirname + '/public/uploads'));
 //routes
 app.use('/post', Post);
 
+// Logging the rejected field from multer error
+// app.use((error, req, res, next) => {
+//   console.log('This is the rejected field ->', error.field);
+// });
+
 app.get('/', (req, res) => {
   //get requests to the root ("/") will route here
   res.send('SERVER IS UP AND RUNNING'); //Server response by sending a text message " SERVER IS UP AND RUNNING "

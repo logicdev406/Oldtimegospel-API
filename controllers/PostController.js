@@ -1,5 +1,8 @@
 const response = require('../helper/response');
 const Post = require('../models/Post');
+const { uploadAudio, uploadImage } = require('../s3Bucket/uploads');
+const { fetchObject } = require('../s3Bucket/retreave');
+const { s3Bucket } = require('../config/config');
 
 class PostController {
   static async listPosts(req, res) {
@@ -38,44 +41,67 @@ class PostController {
   }
 
   static async createPost(req, res) {
-    const {
-      title,
-      lyrics,
-      audio,
-      description,
-      instagramHandle,
-      facebookHandle
-    } = req.body;
+    const { title, lyrics, description, instagramHandle, facebookHandle } =
+      req.body;
 
-    if (!title || !lyrics || !audio || !description) {
+    const audio = req.files.audio[0];
+    const image = req.files.image[0];
+
+    if (!title || !lyrics || !description || !image || !audio) {
       return res
         .status(428)
         .send(
           response(
-            'The following fields are required but one is missing :- Title, Description, lyrics, Audio'
-          ),
-          {},
-          false
+            'The following fields are required but one is missing :- Title, Image, Description, lyrics, Audio',
+            {},
+            false
+          )
         );
     }
 
-    const file = req.file;
-    if (!file) {
+    // Extracting the image filename and buffer from the req.files
+    const imageFileName = image.originalname;
+    const imageFile = image.buffer;
+
+    // Extracting the audio filename and buffer from the req.files
+    const audioFileName = audio.originalname;
+    const audioFile = audio.buffer;
+
+    // BucketName
+    const bucketname = s3Bucket.s3BucketName;
+
+    // Check if the audio and image name already exists
+    const audioExists = await fetchObject(audioFileName, bucketname);
+    const imageExists = await fetchObject(imageFileName, bucketname);
+
+    // Check if an audio with the name from the res already exists
+    if (audioExists) {
       return res
-        .status(400)
-        .send(response('an image is required to create a product', {}, false));
+        .status(409)
+        .send(
+          response(' Audio with the given name already exists ', {}, false)
+        );
     }
 
-    const fileName = req.file.filename;
-    const basePath = `${req.protocol}://${req.get('host')}/public/uploads/`;
+    // Check if an image with the name from the res already exists
+    if (imageExists) {
+      return res
+        .status(409)
+        .send(
+          response(' Image with the given name already exists ', {}, false)
+        );
+    }
 
-    const image = `${basePath}${fileName}`;
+    // Image upload function
+    const imageUrl = await uploadImage(imageFileName, bucketname, imageFile);
+    // Audio upload function
+    const audioUrl = await uploadAudio(audioFileName, bucketname, audioFile);
 
     let post = new Post({
       title: title,
       description: description,
-      image: image,
-      audio: audio,
+      image: imageUrl,
+      audio: audioUrl,
       lyrics: lyrics,
       facebookHandle: facebookHandle,
       instagramHandle: instagramHandle
@@ -83,7 +109,7 @@ class PostController {
 
     post = await post.save();
 
-    res.send(response('Post was successfully created', post));
+    res.send(response(' Post created successfully ', post));
   }
 
   static async deletePostById(req, res) {

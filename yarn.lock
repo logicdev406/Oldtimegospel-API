@@ -991,6 +991,11 @@
   dependencies:
     "package-json" "^6.3.0"
 
+"lodash.defaults@^4.2.0":
+  "integrity" "sha1-0JF4cW/+pN3p5ft7N/bwgCJ0WAw="
+  "resolved" "https://registry.npmjs.org/lodash.defaults/-/lodash.defaults-4.2.0.tgz"
+  "version" "4.2.0"
+
 "lodash@^4.17.21":
   "integrity" "sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg=="
   "resolved" "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz"
@@ -1578,6 +1583,13 @@
   "resolved" "https://registry.npmjs.org/sequelize-pool/-/sequelize-pool-7.1.0.tgz"
   "version" "7.1.0"
 
+"sequelize-slugify@^1.6.0":
+  "integrity" "sha512-HGBktOUASnuIBcA+GQ++gD6uMXrBCCiPezX03c6oQFGxsQs6faVoeUDcINohmpH7mwGTOsZRGzQ5D7mmQQVyvA=="
+  "resolved" "https://registry.npmjs.org/sequelize-slugify/-/sequelize-slugify-1.6.0.tgz"
+  "version" "1.6.0"
+  dependencies:
+    "sluglife" "^0.9.8"
+
 "sequelize@^6.16.1":
   "integrity" "sha512-YFGqrwkmEhSbpZBxay5+PRKMiZNNUJzgIixCyFkLm9+/5Rqq5jBADEjTAC8RYHzwsOGNboYh18imXrYNCjBZCQ=="
   "resolved" "https://registry.npmjs.org/sequelize/-/sequelize-6.16.1.tgz"
@@ -1623,6 +1635,14 @@
   "integrity" "sha512-sDl4qMFpijcGw22U5w63KmD3cZJfBuFlVNbVMKje2keoKML7X2UzWbc4XrmEbDwg0NXJc3yv4/ox7b+JWb57kQ=="
   "resolved" "https://registry.npmjs.org/signal-exit/-/signal-exit-3.0.6.tgz"
   "version" "3.0.6"
+
+"sluglife@^0.9.8":
+  "integrity" "sha512-tJ5KZ9E8ApCFDIQqKbqXVhi4FdTjWCKg1jeEB8M7UxRaT3Sk9Al3GwFfltVV6JJhTZaHrONthNmWtZMExJNRqQ=="
+  "resolved" "https://registry.npmjs.org/sluglife/-/sluglife-0.9.8.tgz"
+  "version" "0.9.8"
+  dependencies:
+    "lodash.defaults" "^4.2.0"
+    "unicode" ">=11.0.1"
 
 "sqlstring@^2.3.2":
   "integrity" "sha512-vF4ZbYdKS8OnoJAWBmMxCQDkiEBkGQYU7UZPtL8flbDRSNkhaXvRJ279ZtI6M+zDaQovVU4tuRgzK5fVhvFAhg=="
@@ -1774,6 +1794,11 @@
   "integrity" "sha512-WxONCrssBM8TSPRqN5EmsjVrsv4A8X12J4ArBiiayv3DyyG3ZlIg6yysuuSYdZsVz3TKcTg2fd//Ujd4CHV1iA=="
   "resolved" "https://registry.npmjs.org/undefsafe/-/undefsafe-2.0.5.tgz"
   "version" "2.0.5"
+
+"unicode@>=11.0.1":
+  "integrity" "sha512-BjinxTXkbm9Jomp/YBTMGusr4fxIG67fNGShHIRAL16Ur2GJTq2xvLi+sxuiJmInCmwqqev2BCFKyvbfp/yAkg=="
+  "resolved" "https://registry.npmjs.org/unicode/-/unicode-14.0.0.tgz"
+  "version" "14.0.0"
 
 "unique-string@^2.0.0":
   "integrity" "sha512-uNaeirEPvpZWSgzwsPGtU2zVSTrn/8L5q/IexZmH0eH6SA73CmAA5U4GwORTxQAZs95TAXLNqeLoPPNO5gZfWg=="

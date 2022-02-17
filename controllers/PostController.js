@@ -41,12 +41,15 @@ class PostController {
   }
 
   static async createPost(req, res) {
+    // Collecting the body from the req.body
     const { title, lyrics, description, instagramHandle, facebookHandle } =
       req.body;
 
-    const audio = req.files.audio[0];
-    const image = req.files.image[0];
+    // Variables to check if audio and image exists
+    const audio = req.files.audio;
+    const image = req.files.image;
 
+    // Making the 5 major fields required
     if (!title || !lyrics || !description || !image || !audio) {
       return res
         .status(428)
@@ -60,12 +63,12 @@ class PostController {
     }
 
     // Extracting the image filename and buffer from the req.files
-    const imageFileName = image.originalname;
-    const imageFile = image.buffer;
+    const imageFileName = req.files.image[0].originalname;
+    const imageFile = req.files.image[0].buffer;
 
     // Extracting the audio filename and buffer from the req.files
-    const audioFileName = audio.originalname;
-    const audioFile = audio.buffer;
+    const audioFileName = req.files.audio[0].originalname;
+    const audioFile = req.files.audio[0].buffer;
 
     // BucketName
     const bucketname = s3Bucket.s3BucketName;
@@ -74,7 +77,7 @@ class PostController {
     const audioExists = await fetchObject(audioFileName, bucketname);
     const imageExists = await fetchObject(imageFileName, bucketname);
 
-    // Check if an audio with the name from the res already exists
+    // Check if an audio with the name from the res.body already exists
     if (audioExists) {
       return res
         .status(409)
@@ -83,7 +86,7 @@ class PostController {
         );
     }
 
-    // Check if an image with the name from the res already exists
+    // Check if an image with the name from the res.body already exists
     if (imageExists) {
       return res
         .status(409)
@@ -97,6 +100,7 @@ class PostController {
     // Audio upload function
     const audioUrl = await uploadAudio(audioFileName, bucketname, audioFile);
 
+    // Creating the post
     let post = new Post({
       title: title,
       description: description,
@@ -107,6 +111,7 @@ class PostController {
       instagramHandle: instagramHandle
     });
 
+    // Saving the post to db
     post = await post.save();
 
     res.send(response(' Post created successfully ', post));

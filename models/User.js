@@ -1,15 +1,14 @@
 const db = require('../db/connection');
 const Sequelize = require('sequelize');
 const { v4: uuidv4 } = require('uuid');
+const Comment = require('./Comment');
 
 const User = db.define('users', {
   id: {
-    type: Sequelize.UUIDV4,
-    allowNull: false,
-    validator: {
-      notEmpty: true
+    type: Sequelize.DataTypes.UUID,
+    defaultValue: function () {
+      return uuidv4();
     },
-    defaultValue: uuidv4(),
     primaryKey: true
   },
   firstName: {
@@ -48,5 +47,7 @@ const User = db.define('users', {
     }
   }
 });
+
+User.hasMany(Comment);
 
 module.exports = User;

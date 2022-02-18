@@ -8,6 +8,7 @@ const db = require('./db/connection');
 
 //routers import
 const Post = require('./routers/post');
+const User = require('./routers/user');
 
 //Middlewares
 app.use(bodyParser.json());
@@ -16,6 +17,7 @@ app.use('/public/uploads', express.static(__dirname + '/public/uploads'));
 
 //routes
 app.use('/post', Post);
+app.use('/user', User);
 
 // Logging the rejected field from multer error
 // app.use((error, req, res, next) => {
@@ -31,8 +33,8 @@ const port = process.env.PORT || 5000; //Save the port number where your server 
 
 // Sync all models that are not
 // already in the database
-// db.sync({ force: true });
-db.sync();
+db.sync({ force: true });
+// db.sync();
 
 // Database connect
 db.authenticate()

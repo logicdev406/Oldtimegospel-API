@@ -16,35 +16,40 @@ const User = db.define('users', {
     allowNull: false,
     validator: {
       notEmpty: true
-    }
+    },
+    defaultValue: ''
   },
   lastName: {
     type: Sequelize.STRING,
     allowNull: false,
     validator: {
       notEmpty: true
-    }
+    },
+    defaultValue: ''
   },
   role: {
     type: Sequelize.STRING,
     allowNull: false,
     validator: {
       notEmpty: true
-    }
+    },
+    defaultValue: 'basic'
   },
   email: {
     type: Sequelize.STRING,
     allowNull: false,
     validator: {
       notEmpty: true
-    }
+    },
+    defaultValue: ''
   },
   password: {
     type: Sequelize.STRING,
     allowNull: false,
     validator: {
       notEmpty: true
-    }
+    },
+    defaultValue: ''
   }
 });
 

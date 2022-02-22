@@ -14,7 +14,7 @@ router.get('/', listUsers);
 router.post('/', createUser);
 
 // Update user
-router.post('/:id', updateUserById);
+router.put('/:id', updateUserById);
 
 // Login user
 router.post('/login', loginUser);

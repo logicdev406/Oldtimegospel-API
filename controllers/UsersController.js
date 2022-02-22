@@ -1,6 +1,7 @@
 const response = require('../helper/response');
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 // Config import
 const { secret } = require('../config/config');
@@ -102,6 +103,7 @@ class UserController {
   static async loginUser(req, res) {
     try {
       const { email, password } = req.body;
+      console.log({ email: email });
 
       const user = await User.findOne({ where: { email: email } });
 

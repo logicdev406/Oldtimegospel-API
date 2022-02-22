@@ -25,6 +25,20 @@ class UserController {
     try {
       const { firstName, lastName, email, password } = req.body;
 
+      // Check if the given id is valide
+      const emailExists = await User.findOne({
+        where: {
+          email: email
+        }
+      });
+
+      if (emailExists)
+        return res
+          .status(500)
+          .send(
+            response(' User with the given email already exists', {}, false)
+          );
+
       const user = await User.create({
         firstName: firstName,
         lastName: lastName,

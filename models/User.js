@@ -35,6 +35,14 @@ const User = db.define('users', {
     },
     defaultValue: 'basic'
   },
+  accountStatus: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    validator: {
+      notEmpty: true
+    },
+    defaultValue: 'active'
+  },
   email: {
     type: Sequelize.STRING,
     allowNull: false,

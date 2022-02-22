@@ -133,7 +133,34 @@ class UserController {
     }
   }
 
-  // Delete user
+  // Here we are not deleting the actual user but we are changing the account status of the user to notActive
+  static async deleteUserById(req, res) {
+    try {
+      const id = req.params.id;
+
+      const userExists = await User.findOne({ where: { id: id } });
+
+      if (!userExists) {
+        return res.status(404).send(response('user not found', {}, false));
+      }
+
+      const user = await User.update(
+        {
+          accountStatus: 'notActive'
+        },
+        { where: { id: id } }
+      );
+
+      if (!user)
+        return res
+          .status(500)
+          .send(response(' User can not be deleted ', {}, false));
+
+      return res.send(response('User was successfullly deleted', user));
+    } catch (err) {
+      console.log(err.message);
+    }
+  }
 }
 
 module.exports = UserController;

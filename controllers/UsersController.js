@@ -135,7 +135,7 @@ class UserController {
     }
   }
 
-  // Here we are not deleting the actual user but we are changing the account status of the user to notActive
+  // Here we are not deleting the actual user but we are changing the accountStatus field of the user from active to notActive
   static async deleteUserById(req, res) {
     try {
       const id = req.params.id;

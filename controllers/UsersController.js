@@ -38,36 +38,46 @@ class UserController {
           .send(response('The user can not be created', {}, false));
 
       res.send(response('User was created successfully', user));
-    } catch (error) {
-      res.send(response(error.message, {}, false));
+    } catch (err) {
+      console.log(err.message);
     }
   }
 
   // Update user by id
   static async updateUserById(req, res) {
-    // Check if the given id is valide
-
-    const update = {
-      ...req.body
-    };
-    const filter = { _id: req.user.userId };
-
     try {
-      const user = await User.findOneAndUpdate(filter, update, {
-        new: true
-      }).select('-passwordHash');
+      const { firstName, lastName, role } = req.body;
+      const id = req.params.id;
+
+      // Check if the given id is valide
+      const userExists = await User.findOne({
+        where: {
+          id: id
+        }
+      });
+
+      if (!userExists)
+        return res
+          .status(500)
+          .send(response(' User with the given ID does not exists', {}, false));
+
+      const user = await User.update(
+        {
+          firstName: firstName,
+          lastName: lastName,
+          role: role
+        },
+        { where: { id: id } }
+      );
 
       if (!user)
         return res
           .status(500)
           .send(response('The user can not be updated', {}, false));
 
-      return res
-        .status(200)
-        .send(response('User was successfullly updated', user));
-    } catch (error) {
-      res.status(409).send(response(error.message, {}, false));
-      console.log(error.message);
+      return res.send(response('User was successfullly updated', user));
+    } catch (err) {
+      console.log(err.message);
     }
   }
 
@@ -99,8 +109,8 @@ class UserController {
       } else {
         res.status(400).send(response('password is wrong!', {}, false));
       }
-    } catch (error) {
-      console.log(error.message);
+    } catch (err) {
+      console.log(err.message);
     }
   }
 

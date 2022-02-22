@@ -2,6 +2,9 @@ const response = require('../helper/response');
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
 
+// Config import
+const { secret } = require('../config/config');
+
 class UserController {
   // List users
   static async listUsers(req, res) {
@@ -98,30 +101,32 @@ class UserController {
   // Login user
   static async loginUser(req, res) {
     try {
-      const user = await User.findOne({ email: req.body.email });
+      const { email, password } = req.body;
+
+      const user = await User.findOne({ where: { email: email } });
 
       if (!user) {
-        return res.status(400).send(response('user not found', {}, false));
+        return res.status(404).send(response('user not found', {}, false));
       }
 
-      if (user && bcrypt.compareSync(req.body.password, user.passwordHash)) {
+      if (user && bcrypt.compareSync(password, user.password)) {
         const token = jwt.sign(
           {
-            userId: user.id,
+            id: user.id,
             role: user.role
           },
           secret,
           { expiresIn: '1d' }
         );
 
-        return res.status(200).send(
+        return res.send(
           response('Login successful', {
             user: user.email,
             token: token
           })
         );
       } else {
-        res.status(400).send(response('password is wrong!', {}, false));
+        res.status(403).send(response('password is wrong!', {}, false));
       }
     } catch (err) {
       console.log(err.message);

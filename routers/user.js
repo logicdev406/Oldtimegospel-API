@@ -2,7 +2,8 @@ const router = require('express').Router();
 const {
   listUsers,
   createUser,
-  updateUserById
+  updateUserById,
+  loginUser
 } = require('../controllers/UsersController');
 
 // list users endpoint
@@ -13,5 +14,8 @@ router.post('/', createUser);
 
 // Update user
 router.post('/:id', updateUserById);
+
+// Login user
+router.post('/login', loginUser);
 
 module.exports = router;

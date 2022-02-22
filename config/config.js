@@ -12,5 +12,6 @@ module.exports = {
     s3AccessKeyId: process.env.S3_ACCESS_KEY_ID,
     s3SecretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
     s3BucketRegion: process.env.S3_BUCKET_REGION
-  }
+  },
+  secret: process.env.SECRET
 };

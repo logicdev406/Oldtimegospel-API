@@ -1,6 +1,6 @@
 const response = require('../helper/response');
 const User = require('../models/User');
-// const bycrypt = require('bc');
+const bcrypt = require('bcrypt');
 
 class UserController {
   // List users
@@ -21,18 +21,16 @@ class UserController {
   }
 
   // Register user
-  static async createAdminUser(req, res) {
+  static async createUser(req, res) {
     try {
-      const { firstName, lastName, email, role, password } = req.body;
+      const { firstName, lastName, email, password } = req.body;
 
-      let user = new User({
+      const user = await User.create({
         firstName: firstName,
         lastName: lastName,
-        role: role,
         email: email,
         password: bcrypt.hashSync(password, 10)
       });
-      user = await user.save();
 
       if (!user)
         return res

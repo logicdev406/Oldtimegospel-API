@@ -61,6 +61,4 @@ const User = db.define('users', {
   }
 });
 
-User.hasMany(Comment);
-
 module.exports = User;

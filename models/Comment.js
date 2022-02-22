@@ -17,6 +17,14 @@ const Comment = db.define('comments', {
       notEmpty: true
     },
     defaultValue: ''
+  },
+  name: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    validator: {
+      notEmpty: true
+    },
+    defaultValue: 'Anonymous'
   }
 });
 

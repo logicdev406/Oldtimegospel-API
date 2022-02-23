@@ -130,6 +130,87 @@ class PostController {
     }
   }
 
+  // Update user by id
+  static async updatePostById(req, res) {
+    try {
+      const { title, description, lyrics, instagramHandle, facebookHandle } =
+        req.body;
+      const id = req.params.id;
+
+      // Check if the given id is valide
+      const postExists = await Post.findOne({
+        where: {
+          id: id
+        }
+      });
+
+      if (!postExists)
+        return res
+          .status(500)
+          .send(response(' Post with the given ID does not exists', {}, false));
+
+      // Extracting the image filename and buffer from the req.files
+      const imageFileName = req.files.image[0].originalname;
+      const imageFile = req.files.image[0].buffer;
+
+      // Extracting the audio filename and buffer from the req.files
+      const audioFileName = req.files.audio[0].originalname;
+      const audioFile = req.files.audio[0].buffer;
+
+      // BucketName
+      const bucketname = s3Bucket.s3BucketName;
+
+      // Check if the audio and image name already exists
+      const audioExists = await fetchObject(audioFileName, bucketname);
+      const imageExists = await fetchObject(imageFileName, bucketname);
+
+      // Check if an audio with the name from the res.body already exists
+      if (audioExists) {
+        return res
+          .status(409)
+          .send(
+            response(' Audio with the given name already exists ', {}, false)
+          );
+      }
+
+      // Check if an image with the name from the res.body already exists
+      if (imageExists) {
+        return res
+          .status(409)
+          .send(
+            response(' Image with the given name already exists ', {}, false)
+          );
+      }
+
+      // Image upload function
+      const imageUrl = await uploadImage(imageFileName, bucketname, imageFile);
+      // Audio upload function
+      const audioUrl = await uploadAudio(audioFileName, bucketname, audioFile);
+
+      const post = await Post.update(
+        {
+          title: title,
+          audio: audioUrl,
+          image: imageUrl,
+          description: description,
+          lyrics: lyrics,
+          facebookHandle: facebookHandle,
+          instagramHandle: instagramHandle
+        },
+        { where: { id: id } }
+      );
+
+      if (!post)
+        return res
+          .status(500)
+          .send(response('The post can not be updated', {}, false));
+
+      return res.send(response('Post was successfullly updated', user));
+    } catch (err) {
+      console.log(err.message);
+    }
+  }
+
   static async deletePostById(req, res) {
     try {
       let id = req.params.id;

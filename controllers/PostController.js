@@ -1,8 +1,9 @@
 const response = require('../helper/response');
-const Post = require('../models/Post');
 const { uploadAudio, uploadImage } = require('../s3Bucket/uploads');
 const { fetchObject } = require('../s3Bucket/retreave');
 const { s3Bucket } = require('../config/config');
+const Post = require('../models/Post');
+const Comment = require('../models/Comment');
 
 class PostController {
   // List posts
@@ -206,6 +207,23 @@ class PostController {
           .send(response('The post can not be updated', {}, false));
 
       return res.send(response('Post was successfullly updated', user));
+    } catch (err) {
+      console.log(err.message);
+    }
+  }
+
+  // Fetch post by slug
+  static async featchPostComments(req, res) {
+    try {
+      const id = req.params.id;
+
+      const comments = await Comment.findAll({ where: { id: id } });
+
+      if (!comments) {
+        return res.status(404).send(response('No comments found '), {}, false);
+      }
+
+      res.send(response('Featched comment successfully', comments));
     } catch (err) {
       console.log(err.message);
     }

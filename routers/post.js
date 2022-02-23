@@ -10,7 +10,7 @@ const {
   findPostBySlug
 } = require('../controllers/PostController');
 
-// List Posts endpoint
+// List Posts
 router.get('/', listPosts);
 
 // Fetch post by slug

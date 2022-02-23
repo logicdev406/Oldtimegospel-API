@@ -5,7 +5,7 @@ const {
   updateUserById,
   loginUser,
   deleteUserById
-} = require('../controllers/UsersController');
+} = require('../controllers/UserController');
 
 // list users endpoint
 router.get('/', listUsers);

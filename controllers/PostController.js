@@ -63,9 +63,10 @@ class PostController {
           );
       }
 
+      // Checking if the title already exists
       const titleExists = await Post.findOne({ where: { title: title } });
 
-      // Checking if the title already exists
+      // Returning and error message if the title already exists
       if (titleExists) {
         return res
           .status(409)

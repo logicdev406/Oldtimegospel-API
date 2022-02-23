@@ -63,6 +63,17 @@ class PostController {
           );
       }
 
+      const titleExists = await Post.findOne({ where: { title: title } });
+
+      // Checking if the title already exists
+      if (titleExists) {
+        return res
+          .status(409)
+          .send(
+            response('Post with the given title already exists', {}, false)
+          );
+      }
+
       // Extracting the image filename and buffer from the req.files
       const imageFileName = req.files.image[0].originalname;
       const imageFile = req.files.image[0].buffer;

@@ -1,5 +1,7 @@
 const router = require('express').Router();
-const { listPosts } = require('../controllers/PostController');
+const { createComment } = require('../controllers/CommentController');
 
 // List comments
-router.get('/', listPosts);
+router.post('/:id', createComment);
+
+module.exports = router;

@@ -9,6 +9,7 @@ const db = require('./db/connection');
 //routers import
 const Post = require('./routers/post');
 const User = require('./routers/user');
+const Comment = require('./routers/comment');
 
 //Middlewares
 app.use(bodyParser.json());
@@ -18,6 +19,7 @@ app.use('/public/uploads', express.static(__dirname + '/public/uploads'));
 //routes
 app.use('/post', Post);
 app.use('/user', User);
+app.use('/comment', Comment);
 
 // Logging the rejected field from multer error
 // app.use((error, req, res, next) => {

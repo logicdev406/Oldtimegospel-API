@@ -23,7 +23,8 @@ class CommentController {
 
       const comment = await Comment.create({
         text: text,
-        name: name
+        name: name,
+        postId: id
       });
 
       if (!comment)
@@ -37,3 +38,5 @@ class CommentController {
     }
   }
 }
+
+module.exports = CommentController;

@@ -48,8 +48,7 @@ class PostController {
         req.body;
 
       // Variables to check if audio and image exists
-      const audio = req.files.audio;
-      const image = req.files.image;
+      const { audio, image } = req.files;
 
       // Making the 5 major fields required
       if (!title || !lyrics || !description || !image || !audio) {
@@ -103,7 +102,7 @@ class PostController {
       const audioUrl = await uploadAudio(audioFileName, bucketname, audioFile);
 
       // Creating the post
-      let post = new Post({
+      let post = await Post.create({
         title: title,
         description: description,
         image: imageUrl,
@@ -112,9 +111,6 @@ class PostController {
         facebookHandle: facebookHandle,
         instagramHandle: instagramHandle
       });
-
-      // Saving the post to db
-      post = await post.save();
 
       res.send(response(' Post created successfully ', post));
     } catch (err) {

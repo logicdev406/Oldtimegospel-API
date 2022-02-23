@@ -12,8 +12,10 @@ const {
 
 // List Posts endpoint
 router.get('/', listPosts);
+
 // Fetch post by slug
 router.get('/:slug', findPostBySlug);
+
 // Create post
 router.post(
   '/',
@@ -24,6 +26,7 @@ router.post(
   ]),
   createPost
 );
+
 // Delete post by id
 router.delete('/:id', deletePostById);
 

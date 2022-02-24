@@ -26,14 +26,12 @@ class PostController {
   // Fetch post by slug
   static async findPostBySlug(req, res) {
     try {
-      const id = req.params.id;
+      const id = req.params.slug;
 
-      const post = await Post.findById(id);
+      const post = await Post.findOne({ where: { slug: id } });
 
       if (!post) {
-        return res
-          .status(404)
-          .send(response('Post with the given id does not exist'), {}, false);
+        return res.status(404).send(response('Post not found'), {}, false);
       }
 
       res.send(response('Featched post successfully', post));

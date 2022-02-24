@@ -7,11 +7,15 @@ const {
   listPosts,
   createPost,
   deletePostById,
-  findPostBySlug
+  findPostBySlug,
+  featchPostComments
 } = require('../controllers/PostController');
 
 // List Posts
 router.get('/', listPosts);
+
+// List Posts comments
+router.get('/comments/:id', featchPostComments);
 
 // Fetch post by slug
 router.get('/:slug', findPostBySlug);

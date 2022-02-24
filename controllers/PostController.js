@@ -217,7 +217,7 @@ class PostController {
     try {
       const id = req.params.id;
 
-      const comments = await Comment.findAll({ where: { id: id } });
+      const comments = await Comment.findAll({ where: { postId: id } });
 
       if (!comments) {
         return res.status(404).send(response('No comments found '), {}, false);

@@ -19,7 +19,7 @@ class CommentController {
       if (!postExists)
         return res
           .status(500)
-          .send(response(' Post with the given id does exists', {}, false));
+          .send(response(' Post with the given id does not exists', {}, false));
 
       const comment = await Comment.create({
         text: text,

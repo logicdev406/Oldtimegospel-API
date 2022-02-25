@@ -243,6 +243,18 @@ class PostController {
     try {
       const id = req.params.id;
 
+      // Check if post with  the given id exists
+      const postExists = await Post.findOne({
+        where: {
+          id: id
+        }
+      });
+
+      if (!postExists)
+        return res
+          .status(500)
+          .send(response(' Post with the given id does not exists', {}, false));
+
       const comments = await Comment.findAll({ where: { postId: id } });
 
       if (!comments) {

@@ -1,7 +1,13 @@
 const router = require('express').Router();
-const { listHashtags } = require('../controllers/HashtagController');
+const {
+  listHashtags,
+  createHashtag
+} = require('../controllers/HashtagController');
 
-// List comments
-router.post('/:id', listHashtags);
+// List hashtag
+router.get('/', listHashtags);
+
+// Create hashtag
+router.post('/', createHashtag);
 
 module.exports = router;

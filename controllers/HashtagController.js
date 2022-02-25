@@ -24,7 +24,7 @@ class HashtagController {
     try {
       const { title } = req.body;
 
-      // Check if the given id is valide
+      // Check if a hashtag with the given id exists
       const hashtagExists = await Hashtag.findOne({
         where: {
           title: title
@@ -54,42 +54,56 @@ class HashtagController {
   }
 
   // Update hashtag by id
-  //   static async updateHashtagById(req, res) {
-  //     try {
-  //       const { title } = req.body;
-  //       const id = req.params.id;
+  static async updateHashtagById(req, res) {
+    try {
+      const { title } = req.body;
+      const id = req.params.id;
 
-  //       // Check if the given id is valide
-  //       const hashtagExists = await Hashtag.findOne({
-  //         where: {
-  //           id: id
-  //         }
-  //       });
+      // Check if the given id is valide
+      const hashtagExists = await Hashtag.findOne({
+        where: {
+          id: id
+        }
+      });
 
-  //       if (!hashtagExists)
-  //         return res
-  //           .status(500)
-  //           .send(
-  //             response(' Hashtag with the given ID does not exists', {}, false)
-  //           );
+      if (!hashtagExists)
+        return res
+          .status(500)
+          .send(
+            response(' Hashtag with the given ID does not exists', {}, false)
+          );
 
-  //       const hashtag = await Hashtag.update(
-  //         {
-  //           title: title
-  //         },
-  //         { where: { id: id }, individualHooks: true }
-  //       );
+      // Check if the given id is valide
+      const titleExists = await Hashtag.findOne({
+        where: {
+          title: title
+        }
+      });
 
-  //       if (!hashtag)
-  //         return res
-  //           .status(500)
-  //           .send(response('The hashtag can not be updated', {}, false));
+      if (titleExists)
+        return res
+          .status(500)
+          .send(
+            response(' Hashtag with the given title already exists', {}, false)
+          );
 
-  //       return res.send(response('Hashtag was successfullly updated', hashtag));
-  //     } catch (err) {
-  //       console.log(err.message);
-  //     }
-  //   }
+      const hashtag = await Hashtag.update(
+        {
+          title: title
+        },
+        { where: { id: id }, individualHooks: true }
+      );
+
+      if (!hashtag)
+        return res
+          .status(500)
+          .send(response('The hashtag can not be updated', {}, false));
+
+      return res.send(response('Hashtag was successfullly updated', hashtag));
+    } catch (err) {
+      console.log(err.message);
+    }
+  }
 }
 
 module.exports = HashtagController;

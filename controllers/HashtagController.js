@@ -127,6 +127,29 @@ class HashtagController {
       console.log(err.message);
     }
   }
+
+  // Delete hashtag by id
+  static async deleteHashtagById(req, res) {
+    try {
+      const id = req.params.id;
+
+      const hashtag = await Hashtag.destroy({
+        where: {
+          id: id
+        }
+      });
+
+      if (!hashtag) {
+        return res
+          .status(500)
+          .send(response('Hashtag with the given does not exists', {}, false));
+      }
+
+      res.send(response(' Hashtag deleted successfully', {}));
+    } catch (err) {
+      console.log(err.message);
+    }
+  }
 }
 
 module.exports = HashtagController;

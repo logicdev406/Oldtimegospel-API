@@ -3,7 +3,8 @@ const {
   listHashtags,
   createHashtag,
   updateHashtagById,
-  fetchHashtagBySlug
+  fetchHashtagBySlug,
+  deleteHashtagById
 } = require('../controllers/HashtagController');
 
 // List hashtag
@@ -17,5 +18,8 @@ router.post('/', createHashtag);
 
 // Update hashtag by id
 router.put('/:id', updateHashtagById);
+
+// Delete hashtag by id
+router.delete('/:id', deleteHashtagById);
 
 module.exports = router;

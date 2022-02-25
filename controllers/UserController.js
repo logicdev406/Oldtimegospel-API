@@ -18,7 +18,7 @@ class UserController {
           .send(response('Faild to fetch users', {}, false));
       }
 
-      res.send(response('Featched users successfully', users));
+      res.send(response('Fetched users successfully', users));
     } catch (err) {
       console.log(err.message);
     }

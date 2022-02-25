@@ -13,7 +13,30 @@ class HashtagController {
           .send(response('Faild to fetch hashtags', {}, false));
       }
 
-      res.send(response('Featch hashtags successfully', hashtags));
+      res.send(response('Fetch hashtags successfully', hashtags));
+    } catch (err) {
+      console.log(err.message);
+    }
+  }
+
+  // Fetch hashtag by slug
+  static async fetchHashtagBySlug(req, res) {
+    try {
+      const slug = req.params.slug;
+
+      const hashtags = await Hashtag.findOne({
+        where: {
+          slug: slug
+        }
+      });
+
+      if (!hashtags) {
+        return res
+          .status(500)
+          .send(response('Faild to fetch hashtags', {}, false));
+      }
+
+      res.send(response('Fetched hashtags successfully', hashtags));
     } catch (err) {
       console.log(err.message);
     }

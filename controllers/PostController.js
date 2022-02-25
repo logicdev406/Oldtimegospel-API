@@ -17,7 +17,7 @@ class PostController {
           .send(response('Faild to fetch posts', {}, false));
       }
 
-      res.send(response('Featched posts successfully', posts));
+      res.send(response('Fetched posts successfully', posts));
     } catch (err) {
       console.log(err.message);
     }
@@ -34,7 +34,7 @@ class PostController {
         return res.status(404).send(response('Post not found'), {}, false);
       }
 
-      res.send(response('Featched post successfully', post));
+      res.send(response('Fetched post successfully', post));
     } catch (err) {
       console.log(err.message);
     }
@@ -261,7 +261,7 @@ class PostController {
         return res.status(404).send(response('No comments found '), {}, false);
       }
 
-      res.send(response('Featched comment successfully', comments));
+      res.send(response('Fetched comment successfully', comments));
     } catch (err) {
       console.log(err.message);
     }

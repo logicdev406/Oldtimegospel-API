@@ -8,7 +8,8 @@ const {
   createPost,
   deletePostById,
   findPostBySlug,
-  featchPostComments
+  featchPostComments,
+  updatePostById
 } = require('../controllers/PostController');
 
 // List Posts
@@ -29,6 +30,16 @@ router.post(
     { name: 'audio', maxCount: 1 }
   ]),
   createPost
+);
+
+// Update post by id
+router.put(
+  '/update/:id',
+  upload.fields([
+    { name: 'image', maxCount: 1 },
+    { name: 'audio', maxCount: 1 }
+  ]),
+  updatePostById
 );
 
 // Delete post by id

@@ -129,14 +129,28 @@ class PostController {
     }
   }
 
-  // Update user by id
+  // Update post by id
   static async updatePostById(req, res) {
     try {
       const { title, description, lyrics, instagramHandle, facebookHandle } =
         req.body;
+      // console.log(req.body);
       const id = req.params.id;
+      const files = req.files ? req.files : undefined;
 
-      // Check if the given id is valide
+      // Checking if the title already exists
+      const titleExists = await Post.findOne({ where: { title: title } });
+
+      // Returning an error message if the title already exists
+      if (titleExists) {
+        return res
+          .status(409)
+          .send(
+            response('Post with the given title already exists', {}, false)
+          );
+      }
+
+      // Check if a post with the given id exists
       const postExists = await Post.findOne({
         where: {
           id: id
@@ -149,19 +163,29 @@ class PostController {
           .send(response(' Post with the given ID does not exists', {}, false));
 
       // Extracting the image filename and buffer from the req.files
-      const imageFileName = req.files.image[0].originalname;
-      const imageFile = req.files.image[0].buffer;
+      const imageFileName = files.image
+        ? req.files.image[0].originalname
+        : undefined;
+      const imageFile = files.image ? req.files.image[0].buffer : undefined;
 
       // Extracting the audio filename and buffer from the req.files
-      const audioFileName = req.files.audio[0].originalname;
-      const audioFile = req.files.audio[0].buffer;
+      const audioFileName = files.audio
+        ? req.files.audio[0].originalname
+        : undefined;
+      const audioFile = files.audio ? req.files.audio[0].buffer : undefined;
 
       // BucketName
       const bucketname = s3Bucket.s3BucketName;
 
       // Check if the audio and image name already exists
-      const audioExists = await fetchObject(audioFileName, bucketname);
-      const imageExists = await fetchObject(imageFileName, bucketname);
+      const audioExists =
+        audioFileName !== undefined
+          ? await fetchObject(audioFileName, bucketname)
+          : undefined;
+      const imageExists =
+        imageFileName !== undefined
+          ? await fetchObject(imageFileName, bucketname)
+          : undefined;
 
       // Check if an audio with the name from the res.body already exists
       if (audioExists) {
@@ -182,9 +206,13 @@ class PostController {
       }
 
       // Image upload function
-      const imageUrl = await uploadImage(imageFileName, bucketname, imageFile);
+      const imageUrl = files.image
+        ? await uploadImage(imageFileName, bucketname, imageFile)
+        : undefined;
       // Audio upload function
-      const audioUrl = await uploadAudio(audioFileName, bucketname, audioFile);
+      const audioUrl = files.audio
+        ? await uploadAudio(audioFileName, bucketname, audioFile)
+        : undefined;
 
       const post = await Post.update(
         {
@@ -196,7 +224,7 @@ class PostController {
           facebookHandle: facebookHandle,
           instagramHandle: instagramHandle
         },
-        { where: { id: id } }
+        { where: { id: id }, individualHooks: true }
       );
 
       if (!post)
@@ -204,7 +232,7 @@ class PostController {
           .status(500)
           .send(response('The post can not be updated', {}, false));
 
-      return res.send(response('Post was successfullly updated', user));
+      return res.send(response('Post was successfully updated', post));
     } catch (err) {
       console.log(err.message);
     }

@@ -75,6 +75,11 @@ const Post = db.define('posts', {
 
 Post.hasMany(Comment);
 
-SequelizeSlugify.slugifyModel(Post, { source: ['title'] });
+SequelizeSlugify.slugifyModel(Post, {
+  source: ['title'],
+  slugOptions: { lower: true },
+  overwrite: true,
+  column: 'slug'
+});
 
 module.exports = Post;

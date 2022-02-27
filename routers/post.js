@@ -9,7 +9,8 @@ const {
   deletePostById,
   findPostBySlug,
   featchPostComments,
-  updatePostById
+  updatePostById,
+  fetchPostByHashtagSlug
 } = require('../controllers/PostController');
 
 // List Posts
@@ -20,6 +21,9 @@ router.get('/comments/:id', featchPostComments);
 
 // Fetch post by slug
 router.get('/:slug', findPostBySlug);
+
+// Fetch all post with the given hashtag slug
+router.get('/hashtag/:slug', fetchPostByHashtagSlug);
 
 // Create post
 router.post(

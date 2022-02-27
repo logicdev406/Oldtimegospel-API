@@ -26,9 +26,9 @@ class PostController {
   // Fetch post by slug
   static async findPostBySlug(req, res) {
     try {
-      const id = req.params.slug;
+      const slug = req.params.slug;
 
-      const post = await Post.findOne({ where: { slug: id } });
+      const post = await Post.findOne({ where: { slug: slug } });
 
       //  Converting list of strings to array
       post.hashtags = post.hashtags.split(' ');
@@ -142,14 +142,21 @@ class PostController {
   // Update post by id
   static async updatePostById(req, res) {
     try {
-      const { title, description, lyrics, instagramHandle, facebookHandle } =
-        req.body;
-      // console.log(req.body);
+      const {
+        title,
+        description,
+        lyrics,
+        hashtags,
+        instagramHandle,
+        facebookHandle
+      } = req.body;
       const id = req.params.id;
       const files = req.files ? req.files : undefined;
 
       // Checking if the title already exists
-      const titleExists = await Post.findOne({ where: { title: title } });
+      const titleExists = title
+        ? await Post.findOne({ where: { title: title } })
+        : '';
 
       // Returning an error message if the title already exists
       if (titleExists) {
@@ -231,6 +238,7 @@ class PostController {
           image: imageUrl,
           description: description,
           lyrics: lyrics,
+          hashtags: hashtags,
           facebookHandle: facebookHandle,
           instagramHandle: instagramHandle
         },
@@ -245,6 +253,34 @@ class PostController {
       return res.send(response('Post was successfully updated', post));
     } catch (err) {
       console.log(err.message);
+    }
+  }
+
+  // Fetch all post with the given hashtag/slug
+  static async fetchPostByHashtagSlug(req, res) {
+    try {
+      const slug = req.params.slug;
+
+      const posts = await Post.findAll({});
+
+      const filteredPosts = posts.map((post) => {
+        post.hashtags = post.hashtags.split(' ');
+
+        post.hashtags.filter((hashtag) => {
+          return hashtag === slug ? post : '';
+        });
+
+        return post;
+      });
+
+      console.log(filteredPosts);
+
+      if (!filteredPosts)
+        return res.status(500).send(response('Post not found', {}, false));
+
+      return res.send(response('featched posts successfully ', filteredPosts));
+    } catch (err) {
+      console.log(err);
     }
   }
 

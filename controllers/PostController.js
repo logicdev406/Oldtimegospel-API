@@ -43,8 +43,14 @@ class PostController {
   static async createPost(req, res) {
     try {
       // Collecting the body from the req.body
-      const { title, lyrics, description, instagramHandle, facebookHandle } =
-        req.body;
+      const {
+        title,
+        lyrics,
+        description,
+        hashtags,
+        instagramHandle,
+        facebookHandle
+      } = req.body;
 
       // Variables to check if audio and image exists
       const { audio, image } = req.files;
@@ -119,6 +125,7 @@ class PostController {
         image: imageUrl,
         audio: audioUrl,
         lyrics: lyrics,
+        hashtags: hashtags,
         facebookHandle: facebookHandle,
         instagramHandle: instagramHandle
       });

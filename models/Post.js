@@ -62,11 +62,11 @@ const Post = db.define('posts', {
     allowNull: false,
     defaultValue: ''
   },
-  // hashtags: {
-  //   type: Sequelize.ARRAY(Sequelize.STRING),
-  //   allowNull: false,
-  //   defaultValue: []
-  // }
+  hashtags: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    defaultValue: ''
+  },
   slug: {
     type: Sequelize.STRING,
     unique: true

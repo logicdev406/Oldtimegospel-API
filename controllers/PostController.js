@@ -263,22 +263,19 @@ class PostController {
 
       const posts = await Post.findAll({});
 
-      const filteredPosts = posts.map((post) => {
+      const filteredPosts = posts.filter((post) => {
         post.hashtags = post.hashtags.split(' ');
 
-        post.hashtags.filter((hashtag) => {
-          return hashtag === slug ? post : '';
-        });
-
-        return post;
+        return post.hashtags.indexOf(slug) >= 0;
       });
 
-      console.log(filteredPosts);
+      if (filteredPosts.length < 1) {
+        return res
+          .status(500)
+          .send(response('Post with the given hashtag not found', {}, false));
+      }
 
-      if (!filteredPosts)
-        return res.status(500).send(response('Post not found', {}, false));
-
-      return res.send(response('featched posts successfully ', filteredPosts));
+      return res.send(response('Featched posts successfully ', filteredPosts));
     } catch (err) {
       console.log(err);
     }

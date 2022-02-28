@@ -257,7 +257,7 @@ class PostController {
   }
 
   // Fetch all post with the given hashtag/slug
-  static async fetchPostByHashtagSlug(req, res) {
+  static async fetchPostByHashtag(req, res) {
     try {
       const slug = req.params.slug;
 

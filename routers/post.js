@@ -10,7 +10,7 @@ const {
   findPostBySlug,
   featchPostComments,
   updatePostById,
-  fetchPostByHashtagSlug
+  fetchPostByHashtag
 } = require('../controllers/PostController');
 
 // List Posts
@@ -23,7 +23,7 @@ router.get('/comments/:id', featchPostComments);
 router.get('/:slug', findPostBySlug);
 
 // Fetch all post with the given hashtag slug
-router.get('/hashtag/:slug', fetchPostByHashtagSlug);
+router.get('/hashtag/:slug', fetchPostByHashtag);
 
 // Create post
 router.post(

@@ -6,6 +6,7 @@ const {
   fetchHashtagBySlug,
   deleteHashtagById
 } = require('../controllers/HashtagController');
+const { isAdmin, authUser } = require('../helper/jwt');
 
 // List hashtag
 router.get('/', listHashtags);
@@ -14,12 +15,12 @@ router.get('/', listHashtags);
 router.get('/:slug', fetchHashtagBySlug);
 
 // Create hashtag
-router.post('/', createHashtag);
+router.post('/', [authUser, isAdmin], createHashtag);
 
 // Update hashtag by id
-router.put('/:id', updateHashtagById);
+router.put('/:id', [authUser, isAdmin], updateHashtagById);
 
 // Delete hashtag by id
-router.delete('/:id', deleteHashtagById);
+router.delete('/:id', [authUser, isAdmin], deleteHashtagById);
 
 module.exports = router;

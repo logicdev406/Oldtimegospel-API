@@ -12,6 +12,7 @@ const {
   updatePostById,
   fetchPostByHashtag
 } = require('../controllers/PostController');
+const { isAdmin, authUser } = require('../helper/jwt');
 
 // List Posts
 router.get('/', listPosts);
@@ -28,7 +29,7 @@ router.get('/hashtag/:slug', fetchPostByHashtag);
 // Create post
 router.post(
   '/',
-  // upload.single('audio'),
+  [authUser, isAdmin],
   upload.fields([
     { name: 'image', maxCount: 1 },
     { name: 'audio', maxCount: 1 }
@@ -39,6 +40,7 @@ router.post(
 // Update post by id
 router.put(
   '/update/:id',
+  [authUser, isAdmin],
   upload.fields([
     { name: 'image', maxCount: 1 },
     { name: 'audio', maxCount: 1 }
@@ -47,6 +49,6 @@ router.put(
 );
 
 // Delete post by id
-router.delete('/:id', deletePostById);
+router.delete('/:id', [authUser, isAdmin], deletePostById);
 
 module.exports = router;

@@ -4,12 +4,16 @@ const {
   createUser,
   updateUserById,
   loginUser,
-  deleteUserById
+  deleteUserById,
+  findUserbyId
 } = require('../controllers/UserController');
 const { authUser, isAdmin } = require('../helper/jwt');
 
 // list users endpoint
 router.get('/', [authUser, isAdmin], listUsers);
+
+// fetch user by id
+router.get('/:id', [authUser], findUserbyId);
 
 // Create user
 router.post('/', createUser);

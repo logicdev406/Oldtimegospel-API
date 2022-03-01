@@ -10,7 +10,9 @@ class UserController {
   // List users
   static async listUsers(req, res) {
     try {
-      const users = await User.findAll();
+      const users = await User.findAll({
+        attributes: { exclude: ['password'] }
+      });
 
       if (!users) {
         return res
@@ -19,6 +21,26 @@ class UserController {
       }
 
       res.send(response('Fetched users successfully', users));
+    } catch (err) {
+      console.log(err.message);
+    }
+  }
+
+  // fetch user by id
+  static async findUserbyId(req, res) {
+    try {
+      const id = req.params.id;
+
+      const user = await User.findOne({
+        attributes: { exclude: ['password'] },
+        where: { id: id }
+      });
+
+      if (!user) {
+        return res.status(404).send(response('Faild to fetch user', {}, false));
+      }
+
+      res.send(response('Fetched user successfully', user));
     } catch (err) {
       console.log(err.message);
     }
@@ -103,7 +125,6 @@ class UserController {
   static async loginUser(req, res) {
     try {
       const { email, password } = req.body;
-      console.log({ email: email });
 
       const user = await User.findOne({ where: { email: email } });
 

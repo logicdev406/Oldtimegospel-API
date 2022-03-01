@@ -115,7 +115,7 @@ class UserController {
           .status(500)
           .send(response('The user can not be updated', {}, false));
 
-      return res.send(response('User was successfullly updated', user));
+      return res.send(response('User was successfully updated', user));
     } catch (err) {
       console.log(err.message);
     }
@@ -179,7 +179,7 @@ class UserController {
           .status(500)
           .send(response(' User can not be deleted ', {}, false));
 
-      return res.send(response('User was successfullly deleted', user));
+      return res.send(response('User was successfully deleted', user));
     } catch (err) {
       console.log(err.message);
     }

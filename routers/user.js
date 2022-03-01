@@ -25,6 +25,6 @@ router.put('/:id', [authUser], updateUserById);
 router.post('/login', loginUser);
 
 // Delete user
-router.delete('/:id', [authUser, isAdmin], deleteUserById);
+router.delete('/:id', [authUser], deleteUserById);
 
 module.exports = router;

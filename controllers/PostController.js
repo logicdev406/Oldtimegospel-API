@@ -1,6 +1,7 @@
 const response = require('../helper/response');
 const { uploadAudio, uploadImage } = require('../s3Bucket/uploads');
 const { fetchObject } = require('../s3Bucket/retreave');
+const { deleteFile } = require('../s3Bucket/delete');
 const { s3Bucket } = require('../config/config');
 const Post = require('../models/Post');
 const Comment = require('../models/Comment');
@@ -185,7 +186,6 @@ class PostController {
         ? req.files.image[0].originalname
         : undefined;
       const imageFile = files.image ? req.files.image[0].buffer : undefined;
-      // console.log(imageFileName);
 
       // Extracting the audio filename and buffer from the req.files
       const audioFileName = files.audio
@@ -328,6 +328,18 @@ class PostController {
   static async deletePostById(req, res) {
     try {
       const id = req.params.id;
+
+      const postExists = await Post.findOne({ where: { id: id } });
+
+      const audioFileName = await postExists.dataValues.audio.split('/')[3];
+      const imageFileName = await postExists.dataValues.image.split('/')[3];
+
+      // BucketName
+      const bucketname = s3Bucket.s3BucketName;
+
+      // delete image and audio from s3 bucket
+      await deleteFile(audioFileName, bucketname);
+      await deleteFile(imageFileName, bucketname);
 
       const post = await Post.destroy({
         where: {

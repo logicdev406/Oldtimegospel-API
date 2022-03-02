@@ -23,7 +23,7 @@ class PostController {
     }
   }
 
-  // Fetch post by slug
+  // Find post by slug
   static async findPostBySlug(req, res) {
     try {
       const slug = req.params.slug;

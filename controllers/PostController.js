@@ -31,11 +31,7 @@ class PostController {
       const post = await Post.findOne({ where: { slug: slug } });
 
       if (!post) {
-        return res
-          .status(404)
-          .send(
-            response('Post not found with the given slug not found', {}, false)
-          );
+        return res.status(404).send(response('Post not found', {}, false));
       }
 
       //  Converting the hashtag field with list of strings to array

@@ -28,7 +28,7 @@ const isAdmin = (req, res, next) => {
     res.status(200);
     next();
   } else {
-    return res.status(401).send(response('Error: Access Denied', {}, false));
+    return res.status(401).send(response(' Access Denied', {}, false));
   }
 };
 

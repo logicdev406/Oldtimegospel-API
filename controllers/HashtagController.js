@@ -133,6 +133,20 @@ class HashtagController {
     try {
       const id = req.params.id;
 
+      // Check if the given id is valide
+      const hashtagExists = await Hashtag.findOne({
+        where: {
+          id: id
+        }
+      });
+
+      if (!hashtagExists)
+        return res
+          .status(500)
+          .send(
+            response(' Hashtag with the given ID does not exists', {}, false)
+          );
+
       const hashtag = await Hashtag.destroy({
         where: {
           id: id

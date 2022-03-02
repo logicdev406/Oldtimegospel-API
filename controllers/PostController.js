@@ -4,6 +4,7 @@ const { fetchObject } = require('../s3Bucket/retreave');
 const { s3Bucket } = require('../config/config');
 const Post = require('../models/Post');
 const Comment = require('../models/Comment');
+const Hashtag = require('../models/Hashtag');
 
 class PostController {
   // List posts
@@ -262,6 +263,16 @@ class PostController {
     try {
       const slug = req.params.slug;
 
+      const hashtagExists = await Hashtag.findOne({ where: { slug: slug } });
+
+      if (!hashtagExists) {
+        return res
+          .status(500)
+          .send(
+            response('Hashtag with the given slug does not exists', {}, false)
+          );
+      }
+
       const posts = await Post.findAll({});
 
       const filteredPosts = posts.filter((post) => {
@@ -269,6 +280,8 @@ class PostController {
 
         return post.hashtags.indexOf(slug) >= 0;
       });
+
+      console.log(filteredPosts);
 
       if (filteredPosts.length < 1) {
         return res

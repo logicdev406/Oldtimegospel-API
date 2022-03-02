@@ -30,12 +30,16 @@ class PostController {
 
       const post = await Post.findOne({ where: { slug: slug } });
 
-      //  Converting list of strings to array
-      post.hashtags = post.hashtags.split(' ');
-
       if (!post) {
-        return res.status(404).send(response('Post not found'), {}, false);
+        return res
+          .status(404)
+          .send(
+            response('Post not found with the given slug not found', {}, false)
+          );
       }
+
+      //  Converting list of strings to array
+      post.hashtags = await post.hashtags.split(' ');
 
       res.send(response('Fetched post successfully', post));
     } catch (err) {

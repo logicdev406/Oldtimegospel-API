@@ -38,7 +38,7 @@ class PostController {
           );
       }
 
-      //  Converting list of strings to array
+      //  Converting the hashtag field with list of strings to array
       post.hashtags = await post.hashtags.split(' ');
 
       res.send(response('Fetched post successfully', post));

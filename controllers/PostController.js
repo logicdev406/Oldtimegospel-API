@@ -151,7 +151,19 @@ class PostController {
         facebookHandle
       } = req.body;
       const id = req.params.id;
-      const files = req.files ? req.files : undefined;
+      const files = req.files;
+
+      // Check if a post with the given id exists
+      const postExists = await Post.findOne({
+        where: {
+          id: id
+        }
+      });
+
+      if (!postExists)
+        return res
+          .status(500)
+          .send(response(' Post with the given ID does not exists', {}, false));
 
       // Checking if the title already exists
       const titleExists = title
@@ -167,23 +179,12 @@ class PostController {
           );
       }
 
-      // Check if a post with the given id exists
-      const postExists = await Post.findOne({
-        where: {
-          id: id
-        }
-      });
-
-      if (!postExists)
-        return res
-          .status(500)
-          .send(response(' Post with the given ID does not exists', {}, false));
-
       // Extracting the image filename and buffer from the req.files
       const imageFileName = files.image
         ? req.files.image[0].originalname
         : undefined;
       const imageFile = files.image ? req.files.image[0].buffer : undefined;
+      // console.log(imageFileName);
 
       // Extracting the audio filename and buffer from the req.files
       const audioFileName = files.audio
@@ -204,7 +205,7 @@ class PostController {
           ? await fetchObject(imageFileName, bucketname)
           : undefined;
 
-      // Check if an audio with the name from the res.body already exists
+      // Check if an audio with the name from the res.files already exists
       if (audioExists) {
         return res
           .status(409)
@@ -213,7 +214,7 @@ class PostController {
           );
       }
 
-      // Check if an image with the name from the res.body already exists
+      // Check if an image with the name from the res.files already exists
       if (imageExists) {
         return res
           .status(409)

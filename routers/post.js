@@ -38,7 +38,7 @@ router.post(
 );
 
 // Update post by id
-router.put(
+router.post(
   '/update/:id',
   [authUser, isAdmin],
   upload.fields([

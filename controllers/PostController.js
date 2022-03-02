@@ -310,19 +310,22 @@ class PostController {
     }
   }
 
+  // delete post by id
   static async deletePostById(req, res) {
     try {
-      let id = req.params.id;
+      const id = req.params.id;
 
-      let [post, _] = await Post.deleteById(id);
+      const post = await Post.destroy({
+        where: {
+          id: id
+        }
+      });
 
       if (!post) {
-        return res
-          .status(404)
-          .send(response('Post with the given id does not exist'), {}, false);
+        return res.status(404).send(response('Post not found', {}, false));
       }
 
-      res.send(response('Post was successfully', post));
+      res.send(response('Post was successfully delete', post));
     } catch (err) {
       console.log(err.message);
     }

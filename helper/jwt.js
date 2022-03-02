@@ -14,7 +14,7 @@ const authUser = (req, res, next) => {
     jwt.verify(tokenBody, secret, (error, user) => {
       if (error) {
         console.log('Jwt Error:', error.message);
-        return res.status(401).send(response(' Unauthorized', {}, false));
+        return res.status(401).send(response('Unauthorized', {}, false));
       }
 
       req.user = user;
@@ -28,7 +28,7 @@ const isAdmin = (req, res, next) => {
     res.status(200);
     next();
   } else {
-    return res.status(401).send(response(' Access Denied', {}, false));
+    return res.status(401).send(response('Access Denied', {}, false));
   }
 };
 

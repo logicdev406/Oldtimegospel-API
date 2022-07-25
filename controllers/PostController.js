@@ -11,17 +11,7 @@ class PostController {
   // List posts
   static async listPosts(req, res) {
     try {
-      res.json(res.paginatedResults);
-      // console.log(res.paginatedResults);
-      // const posts = await Post.findAll();
-
-      // if (!posts) {
-      //   return res
-      //     .status(404)
-      //     .send(response('Faild to fetch posts', {}, false));
-      // }
-
-      // res.send(response('Fetched posts successfully', posts));
+      res.send(response('Fetched posts successfully', res.paginatedResults));
     } catch (err) {
       console.log(err.message);
     }

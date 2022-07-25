@@ -13,9 +13,11 @@ const {
   fetchPostByHashtag
 } = require('../controllers/PostController');
 const { isAdmin, authUser } = require('../helper/jwt');
+const paginatedResults = require('../helper/PaginatedResult');
+const Post = require('../models/Post');
 
 // List Posts
-router.get('/', listPosts);
+router.get('/', paginatedResults(Post), listPosts);
 
 // List Posts comments
 router.get('/comments/:id', featchPostComments);

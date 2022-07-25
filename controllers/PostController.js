@@ -51,6 +51,7 @@ class PostController {
       const {
         title,
         lyrics,
+        artist,
         description,
         hashtags,
         instagramHandle,
@@ -60,13 +61,13 @@ class PostController {
       // Variables to check if audio and image exists
       const { audio, image } = req.files;
 
-      // Making the 5 major fields required
-      if (!title || !lyrics || !description || !image || !audio) {
+      // Making the 6 major fields required
+      if (!title || !artist || !lyrics || !description || !image || !audio) {
         return res
           .status(428)
           .send(
             response(
-              'The following fields are required but one is missing :- Title, Image, Description, lyrics, Audio',
+              'The following fields are required but one is missing :- Title, Image, Description, lyrics, Audio, artist',
               {},
               false
             )
@@ -126,6 +127,7 @@ class PostController {
       // Creating the post
       let post = await Post.create({
         title: title,
+        artist: artist,
         description: description,
         image: imageUrl,
         audio: audioUrl,

@@ -33,7 +33,7 @@ app.get('/', (req, res) => {
   res.send('SERVER IS UP AND RUNNING'); //Server response by sending a text message " SERVER IS UP AND RUNNING "
 });
 
-const port = process.env.PORT || 5000; //Save the port number where your server will be listening
+const port = process.env.PORT || 6000; //Save the port number where your server will be listening
 
 // Sync all models that are not
 // already in the database

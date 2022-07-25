@@ -12,6 +12,14 @@ const Post = db.define('posts', {
     },
     primaryKey: true
   },
+  artist: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    validator: {
+      notEmpty: true
+    },
+    defaultValue: ''
+  },
   title: {
     type: Sequelize.STRING,
     allowNull: false,

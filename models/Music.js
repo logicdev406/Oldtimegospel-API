@@ -4,7 +4,7 @@ const { v4: uuidv4 } = require('uuid');
 const SequelizeSlugify = require('sequelize-slugify');
 const Comment = require('./Comment');
 
-const Post = db.define('posts', {
+const Music = db.define('posts', {
   id: {
     type: Sequelize.DataTypes.UUID,
     defaultValue: function () {
@@ -81,13 +81,13 @@ const Post = db.define('posts', {
   }
 });
 
-Post.hasMany(Comment);
+Music.hasMany(Comment);
 
-SequelizeSlugify.slugifyModel(Post, {
+SequelizeSlugify.slugifyModel(Music, {
   source: ['title'],
   slugOptions: { lower: true },
   overwrite: true,
   column: 'slug'
 });
 
-module.exports = Post;
+module.exports = Music;

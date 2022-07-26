@@ -3,13 +3,13 @@ const { uploadAudio, uploadImage } = require('../s3Bucket/uploads');
 const { fetchObject } = require('../s3Bucket/retreave');
 const { deleteFile } = require('../s3Bucket/delete');
 const { s3Bucket } = require('../config/config');
-const Post = require('../models/Post');
+const Music = require('../models/Music');
 const Comment = require('../models/Comment');
 const Hashtag = require('../models/Hashtag');
 
-class PostController {
+class MusicController {
   // List posts
-  static async listPosts(req, res) {
+  static async listMusics(req, res) {
     try {
       res.send(response('Fetched posts successfully', res.paginatedResults));
     } catch (err) {
@@ -17,27 +17,27 @@ class PostController {
     }
   }
 
-  // Find post by slug
-  static async findPostBySlug(req, res) {
+  // Find music by slug
+  static async findMusicBySlug(req, res) {
     try {
       const slug = req.params.slug;
 
-      const post = await Post.findOne({ where: { slug: slug } });
+      const music = await Music.findOne({ where: { slug: slug } });
 
-      if (!post) {
-        return res.status(404).send(response('Post not found', {}, false));
+      if (!music) {
+        return res.status(404).send(response('Music not found', {}, false));
       }
 
       //  Converting the hashtag field with list of strings to array
-      post.hashtags = await post.hashtags.split(' ');
+      music.hashtags = await music.hashtags.split(' ');
 
-      res.send(response('Fetched post successfully', post));
+      res.send(response('Fetched music successfully', music));
     } catch (err) {
       console.log(err.message);
     }
   }
 
-  static async createPost(req, res) {
+  static async createMusic(req, res) {
     try {
       // Collecting the body from the req.body
       const {
@@ -67,14 +67,14 @@ class PostController {
       }
 
       // Checking if the title already exists
-      const titleExists = await Post.findOne({ where: { title: title } });
+      const titleExists = await Music.findOne({ where: { title: title } });
 
       // Returning and error message if the title already exists
       if (titleExists) {
         return res
           .status(409)
           .send(
-            response('Post with the given title already exists', {}, false)
+            response('Music with the given title already exists', {}, false)
           );
       }
 
@@ -116,8 +116,8 @@ class PostController {
       // Audio upload function
       const audioUrl = await uploadAudio(audioFileName, bucketname, audioFile);
 
-      // Creating the post
-      let post = await Post.create({
+      // Creating the music
+      let music = await Music.create({
         title: title,
         artist: artist,
         description: description,
@@ -129,14 +129,14 @@ class PostController {
         instagramHandle: instagramHandle
       });
 
-      res.send(response(' Post created successfully ', post));
+      res.send(response(' Music created successfully ', music));
     } catch (err) {
       console.log(err.message);
     }
   }
 
-  // Update post by id
-  static async updatePostById(req, res) {
+  // Update music by id
+  static async updateMusicById(req, res) {
     try {
       const {
         title,
@@ -149,21 +149,23 @@ class PostController {
       const id = req.params.id;
       const files = req.files;
 
-      // Check if a post with the given id exists
-      const postExists = await Post.findOne({
+      // Check if a music with the given id exists
+      const musicExists = await Music.findOne({
         where: {
           id: id
         }
       });
 
-      if (!postExists)
+      if (!musicExists)
         return res
           .status(500)
-          .send(response(' Post with the given ID does not exists', {}, false));
+          .send(
+            response(' Music with the given ID does not exists', {}, false)
+          );
 
       // Checking if the title already exists
       const titleExists = title
-        ? await Post.findOne({ where: { title: title } })
+        ? await Music.findOne({ where: { title: title } })
         : '';
 
       // Returning an error message if the title already exists
@@ -171,7 +173,7 @@ class PostController {
         return res
           .status(409)
           .send(
-            response('Post with the given title already exists', {}, false)
+            response('Music with the given title already exists', {}, false)
           );
       }
 
@@ -227,7 +229,7 @@ class PostController {
         ? await uploadAudio(audioFileName, bucketname, audioFile)
         : undefined;
 
-      const post = await Post.update(
+      const music = await Music.update(
         {
           title: title,
           audio: audioUrl,
@@ -241,19 +243,19 @@ class PostController {
         { where: { id: id }, individualHooks: true }
       );
 
-      if (!post)
+      if (!music)
         return res
           .status(500)
-          .send(response('The post can not be updated', {}, false));
+          .send(response('The music can not be updated', {}, false));
 
-      return res.send(response('Post was successfully updated', post));
+      return res.send(response('Music was successfully updated', music));
     } catch (err) {
       console.log(err.message);
     }
   }
 
-  // Fetch all post with the given hashtag/slug
-  static async fetchPostByHashtag(req, res) {
+  // Fetch all music with the given hashtag/slug
+  static async fetchMusicByHashtag(req, res) {
     try {
       const slug = req.params.slug;
 
@@ -267,44 +269,46 @@ class PostController {
           );
       }
 
-      const posts = await Post.findAll({});
+      const posts = await Music.findAll({});
 
-      const filteredPosts = posts.filter((post) => {
-        post.hashtags = post.hashtags.split(' ');
+      const filteredMusics = posts.filter((music) => {
+        music.hashtags = music.hashtags.split(' ');
 
-        return post.hashtags.indexOf(slug) >= 0;
+        return music.hashtags.indexOf(slug) >= 0;
       });
 
-      console.log(filteredPosts);
+      console.log(filteredMusics);
 
-      if (filteredPosts.length < 1) {
+      if (filteredMusics.length < 1) {
         return res
           .status(500)
-          .send(response('Post with the given hashtag not found', {}, false));
+          .send(response('Music with the given hashtag not found', {}, false));
       }
 
-      return res.send(response('Featched posts successfully ', filteredPosts));
+      return res.send(response('Featched posts successfully ', filteredMusics));
     } catch (err) {
       console.log(err);
     }
   }
 
-  // Fetch post by slug
-  static async featchPostComments(req, res) {
+  // Fetch music by slug
+  static async featchMusicComments(req, res) {
     try {
       const id = req.params.id;
 
-      // Check if post with  the given id exists
-      const postExists = await Post.findOne({
+      // Check if music with  the given id exists
+      const musicExists = await Music.findOne({
         where: {
           id: id
         }
       });
 
-      if (!postExists)
+      if (!musicExists)
         return res
           .status(500)
-          .send(response(' Post with the given id does not exists', {}, false));
+          .send(
+            response(' Music with the given id does not exists', {}, false)
+          );
 
       const comments = await Comment.findAll({ where: { postId: id } });
 
@@ -318,20 +322,20 @@ class PostController {
     }
   }
 
-  // delete post by id
-  static async deletePostById(req, res) {
+  // delete music by id
+  static async deleteMusicById(req, res) {
     try {
       const id = req.params.id;
 
-      const postExists = await Post.findOne({ where: { id: id } });
+      const musicExists = await Music.findOne({ where: { id: id } });
       // console.log(postExists);
 
-      if (!postExists) {
-        return res.status(404).send(response('Post not found', {}, false));
+      if (!musicExists) {
+        return res.status(404).send(response('Music not found', {}, false));
       }
 
-      const audioFileName = await postExists.dataValues.audio.split('/')[3];
-      const imageFileName = await postExists.dataValues.image.split('/')[3];
+      const audioFileName = await musicExists.dataValues.audio.split('/')[3];
+      const imageFileName = await musicExists.dataValues.image.split('/')[3];
 
       // BucketName
       const bucketname = s3Bucket.s3BucketName;
@@ -340,17 +344,17 @@ class PostController {
       await deleteFile(audioFileName, bucketname);
       await deleteFile(imageFileName, bucketname);
 
-      const post = await Post.destroy({
+      const music = await Music.destroy({
         where: {
           id: id
         }
       });
 
-      res.send(response('Post was successfully delete', post));
+      res.send(response('Music was successfully delete', music));
     } catch (err) {
       console.log(err.message);
     }
   }
 }
 
-module.exports = PostController;
+module.exports = MusicController;

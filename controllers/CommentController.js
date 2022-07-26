@@ -1,6 +1,6 @@
 const response = require('../helper/response');
 const Comment = require('../models/Comment');
-const Post = require('../models/Post');
+const Music = require('../models/Music');
 
 class CommentController {
   // Create comment
@@ -10,7 +10,7 @@ class CommentController {
       const id = req.params.id;
 
       // Check if the given id is valide
-      const postExists = await Post.findOne({
+      const postExists = await Music.findOne({
         where: {
           id: id
         }
@@ -19,7 +19,9 @@ class CommentController {
       if (!postExists)
         return res
           .status(500)
-          .send(response(' Post with the given id does not exists', {}, false));
+          .send(
+            response(' Music with the given id does not exists', {}, false)
+          );
 
       const comment = await Comment.create({
         text: text,

@@ -7,7 +7,7 @@ const app = express(); //Instantiate an express app, the main work horse of this
 const db = require('./db/connection');
 
 //routers import
-const Post = require('./routers/post');
+const Music = require('./routers/music');
 const User = require('./routers/user');
 const Comment = require('./routers/comment');
 const Hashtag = require('./routers/hashtag');
@@ -18,7 +18,7 @@ app.use(cors());
 app.use('/public/uploads', express.static(__dirname + '/public/uploads'));
 
 //routes
-app.use('/post', Post);
+app.use('/music', Music);
 app.use('/user', User);
 app.use('/comment', Comment);
 app.use('/hashtag', Hashtag);

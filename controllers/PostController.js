@@ -324,6 +324,11 @@ class PostController {
       const id = req.params.id;
 
       const postExists = await Post.findOne({ where: { id: id } });
+      // console.log(postExists);
+
+      if (!postExists) {
+        return res.status(404).send(response('Post not found', {}, false));
+      }
 
       const audioFileName = await postExists.dataValues.audio.split('/')[3];
       const imageFileName = await postExists.dataValues.image.split('/')[3];
@@ -340,10 +345,6 @@ class PostController {
           id: id
         }
       });
-
-      if (!post) {
-        return res.status(404).send(response('Post not found', {}, false));
-      }
 
       res.send(response('Post was successfully delete', post));
     } catch (err) {

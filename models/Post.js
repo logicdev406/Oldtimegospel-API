@@ -45,7 +45,7 @@ const Post = db.define('posts', {
     defaultValue: ''
   },
   lyrics: {
-    type: Sequelize.STRING,
+    type: Sequelize.TEXT,
     allowNull: false,
     validator: {
       notEmpty: true

@@ -24,12 +24,6 @@ module.exports = function paginatedResults(model) {
       };
     }
 
-    if (endIndex > (await model.count())) {
-      return res
-        .status(500)
-        .send(response(' No data on this page ', {}, false));
-    }
-
     try {
       results.results = await model.findAll({
         limit: limit,

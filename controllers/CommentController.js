@@ -10,13 +10,13 @@ class CommentController {
       const id = req.params.id;
 
       // Check if the given id is valide
-      const postExists = await Music.findOne({
+      const musicExists = await Music.findOne({
         where: {
           id: id
         }
       });
 
-      if (!postExists)
+      if (!musicExists)
         return res
           .status(500)
           .send(
@@ -26,7 +26,7 @@ class CommentController {
       const comment = await Comment.create({
         text: text,
         name: name,
-        postId: id
+        musicId: id
       });
 
       if (!comment)

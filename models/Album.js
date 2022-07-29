@@ -64,6 +64,16 @@ const Album = db.define('albums', {
     allowNull: false,
     defaultValue: ''
   },
+  instagramHandle: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    defaultValue: ''
+  },
+  facebookHandle: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    defaultValue: ''
+  },
   slug: {
     type: Sequelize.STRING,
     unique: true

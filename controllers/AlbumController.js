@@ -34,6 +34,87 @@ class AlbumController {
       console.log(err.message);
     }
   }
+
+  static async createAlbum(req, res) {
+    try {
+      // Collecting the body from the req.body
+      const {
+        title,
+        artist,
+        trackCount,
+        description,
+        hashtags,
+        instagramHandle,
+        facebookHandle
+      } = req.body;
+
+      // console.log(req.body);
+
+      // Variables to check if tracks and image exists
+      const { tracks, image } = req.files;
+
+      // Making the 6 major fields required
+      if (
+        !title ||
+        !artist ||
+        !description ||
+        !image ||
+        !trackCount ||
+        !tracks
+      ) {
+        return res
+          .status(428)
+          .send(
+            response(
+              'The following fields are required but one is missing :- Title, Image, Description, Artist, Tracks, TrackCount',
+              {},
+              false
+            )
+          );
+      }
+
+      // Checking if the title already exists
+      const titleExists = await Album.findOne({ where: { title: title } });
+
+      // Returning and error message if the title already exists
+      if (titleExists) {
+        return res
+          .status(409)
+          .send(
+            response('Album with the given title already exists', {}, false)
+          );
+      }
+
+      // Extracting the image filename and buffer from the req.files
+      const imageFileName = req.files.image[0].originalname;
+      const imageFile = req.files.image[0].buffer;
+
+      // Extracting the tracks filename and buffer from the req.files
+      const tracksFileName = req.files.tracks.map(
+        (track) => track.originalname
+      );
+      const tracksFile = req.files.tracks.map((track) => track.buffer);
+      // console.log(tracksFile);
+
+      // BucketName
+      const bucketname = s3Bucket.s3BucketName;
+
+      // Image upload function
+      // const imageUrl = await uploadImage(imageFileName, bucketname, imageFile);
+
+      // tracks upload function
+      const audioUrl = await uploadAudio(
+        tracksFileName,
+        bucketname,
+        tracksFile
+      );
+      console.log(audioUrl);
+
+      res.json({ message: 'successfull', data: audioUrl });
+    } catch (err) {
+      console.log(err);
+    }
+  }
 }
 
 module.exports = AlbumController;

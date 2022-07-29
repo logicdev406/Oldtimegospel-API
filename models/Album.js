@@ -46,10 +46,14 @@ const Album = db.define('albums', {
   tracks: {
     type: Sequelize.JSON,
     allowNull: false,
-    validator: {
-      notEmpty: true
+    get() {
+      return JSON.parse(this.getDataValue('tracks'));
     },
-    defaultValue: ''
+    set(value) {
+      const data = { value };
+      return this.setDataValue('tracks', JSON.stringify(data));
+    },
+    defaultValue: JSON.stringify({ value: [] })
   },
   trackCount: {
     type: Sequelize.INTEGER,

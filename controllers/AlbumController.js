@@ -48,8 +48,6 @@ class AlbumController {
         facebookHandle
       } = req.body;
 
-      // console.log(req.body);
-
       // Variables to check if tracks and image exists
       const { tracks, image } = req.files;
 
@@ -89,28 +87,33 @@ class AlbumController {
       const imageFileName = req.files.image[0].originalname;
       const imageFile = req.files.image[0].buffer;
 
-      // Extracting the tracks filename and buffer from the req.files
-      const tracksFileName = req.files.tracks.map(
-        (track) => track.originalname
-      );
-      const tracksFile = req.files.tracks.map((track) => track.buffer);
-      // console.log(tracksFile);
-
       // BucketName
       const bucketname = s3Bucket.s3BucketName;
 
       // Image upload function
-      // const imageUrl = await uploadImage(imageFileName, bucketname, imageFile);
+      const imageUrl = await uploadImage(imageFileName, bucketname, imageFile);
 
-      // tracks upload function
-      const audioUrl = await uploadAudio(
-        tracksFileName,
-        bucketname,
-        tracksFile
+      // Extracting the tracks filename and buffer from the req.files and uploading them
+      const tracksUrl = await Promise.all(
+        tracks.map((audio) => {
+          return uploadAudio(audio.originalname, bucketname, audio.buffer);
+        })
       );
-      console.log(audioUrl);
 
-      res.json({ message: 'successfull', data: audioUrl });
+      // Creating the album
+      let album = await Album.create({
+        title: title,
+        artist: artist,
+        trackCount: trackCount,
+        description: description,
+        image: imageUrl,
+        tracks: tracksUrl,
+        hashtags: hashtags,
+        facebookHandle: facebookHandle,
+        instagramHandle: instagramHandle
+      });
+
+      res.send(response(' Album created successfully ', album));
     } catch (err) {
       console.log(err);
     }

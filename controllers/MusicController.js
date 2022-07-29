@@ -248,7 +248,7 @@ class MusicController {
           .status(500)
           .send(response('The music can not be updated', {}, false));
 
-      return res.send(response('Music was successfully updated', music));
+      return res.send(response('Music was updated successfully ', music));
     } catch (err) {
       console.log(err.message);
     }

@@ -2,7 +2,8 @@ const router = require('express').Router();
 const {
   listAlbums,
   findAlbumBySlug,
-  createAlbum
+  createAlbum,
+  updateAlbumById
 } = require('../controllers/AlbumController');
 const multer = require('multer');
 const { memoryStorage } = require('multer');
@@ -27,6 +28,17 @@ router.post(
     { name: 'tracks', maxCount: 20 }
   ]),
   createAlbum
+);
+
+// Update album by Id
+router.post(
+  '/update/:id',
+  [authUser, isAdmin],
+  upload.fields([
+    { name: 'image', maxCount: 1 },
+    { name: 'tracks', maxCount: 20 }
+  ]),
+  updateAlbumById
 );
 
 module.exports = router;

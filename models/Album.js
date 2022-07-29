@@ -1,6 +1,7 @@
 const db = require('../db/connection');
 const Sequelize = require('sequelize');
 const { v4: uuidv4 } = require('uuid');
+const SequelizeSlugify = require('sequelize-slugify');
 
 const Album = db.define('albums', {
   id: {
@@ -51,12 +52,12 @@ const Album = db.define('albums', {
     defaultValue: ''
   },
   trackCount: {
-    type: Sequelize.STRING,
+    type: Sequelize.INTEGER,
     allowNull: false,
     validator: {
       notEmpty: true
     },
-    defaultValue: ''
+    defaultValue: 0
   },
   hashtags: {
     type: Sequelize.STRING,
